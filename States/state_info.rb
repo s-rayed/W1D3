@@ -1,5 +1,6 @@
 require 'pp'
-require 'pry'
+require 'pry-byebug'
+
 @states = {
   OR: 'Oregon',
   FL: 'Florida',
@@ -18,7 +19,7 @@ require 'pry'
 @cities = {
   OR: ['Portland', 'Salem'],
   FL: ['Orlando', 'Talahassee'],
-  CA: ['Sacramento', 'Los Angeles'],
+  CA: ['Sacramento', 'Los Angeles', 'Oakland'],
   NY: ['New York City', 'Albany'],
   MI: ['Detroit', 'Lansing'],
   TX: ['San Antonio', 'Houston'],
@@ -29,16 +30,18 @@ require 'pry'
 
 def describe_state(state_code)
 
-  @cities.each do |k,v|
+  @statecode = state_code.to_sym
+  @selected_state = @cities[@statecode]
+  n = @selected_state.length
+  if @selected_state
+    puts "#{@statecode} is for #{@states[@statecode]}. It has #{@selected_state.count} major cities: #{@selected_state[0..n-1].join(', ')}"
+  else
+    puts "State doesn't exist"
   end
-  if @states.include?(state_code)
-    puts "#{state_code} is for #{@states[state_code]}. It has 2 major cities: #{@cities[state_code][0]}, #{@cities[state_code][1]}"
-  end
-
 
 end
 
-# puts describe_state(:FL)
+describe_state('CA')
 
 @taxes = {
   OR: 0.06,
@@ -53,7 +56,7 @@ end
 def calculate_tax(state_code, amount)
 
   @taxes.each {|k,v|}
-  if @taxes.include?(state_code)
+  if @taxes.include?(@statecode)
     puts "The tax in #{@states[state_code]} for the amount given would be $#{(amount * @taxes[state_code]).round(2)}"
   end
 
@@ -69,5 +72,5 @@ def find_state_for_city(city)
   end
 end
 
-puts find_state_for_city('Portland')
+# puts find_state_for_city('Portland')
 
